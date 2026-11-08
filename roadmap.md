@@ -10,6 +10,7 @@
 - [x] Stop reloading twice in a row and ask the listener to reopen the page instead.
 
 # Admin user activities
-- [ ] Record non-sensitive visitor clicks in the existing app storage.
-- [ ] Add an admin-only activity view and confirmed clear-all action.
-- [ ] Test capture, privacy, and clearing; verify access and deployment requirements.
+- [x] Implement non-sensitive visitor click recording in the existing app storage.
+- [x] Add an admin-only activity view and confirmed clear-all action.
+- [x] Pass click/privacy/clearing tests and verify signed-out admin access is blocked.
+- [ ] Activate Firebase activity rules and verify real admin recording/readback/clearing (blocked: no Firebase deployment authorization or admin test session is available).
