@@ -23,6 +23,7 @@ const Sidebar = () => {
   const { profile } = useAuth();
   const { isAdmin } = useAdmin();
   const isArtist = profile?.role === 'artist';
+  const genrePage = location.pathname === '/videos' || location.pathname.startsWith('/video/') ? '/videos' : '/music';
   return (
     <aside aria-label="Desktop sidebar" className="glass-sidebar fixed left-0 top-0 bottom-0 w-56 z-40 flex flex-col overflow-y-auto scrollbar-hide hidden md:flex border-r">
       <Link to="/" className="flex items-center gap-2 px-6 py-4 border-b border-sidebar-border">
@@ -52,11 +53,11 @@ const Sidebar = () => {
       <div className="px-3 mt-4">
         <div className="flex items-center justify-between px-2 mb-2">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Genres</p>
-          <Link to="/music" className="text-[10px] text-muted-foreground hover:text-primary transition-colors">See All</Link>
+          <Link to={genrePage} className="text-[10px] text-muted-foreground hover:text-primary transition-colors">See All</Link>
         </div>
         <nav className="flex flex-col gap-0.5">
           {sidebarGenres.map(genre => (
-            <Link key={genre} to={`/music?genre=${encodeURIComponent(genre)}`}
+            <Link key={genre} to={`${genrePage}?genre=${encodeURIComponent(genre)}`}
               className="nav-link nav-link-inactive py-1.5 text-xs">
               <Disc3 className="w-3.5 h-3.5" />
               {genre}
