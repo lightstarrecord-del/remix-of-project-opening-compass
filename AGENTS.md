@@ -7,24 +7,10 @@
 >
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
-
-## What Lovable manages
-
-Rules outside this block are the project's own. Change the pieces below in
-Lovable, not by hand. With the [Lovable MCP](https://mcp.lovable.dev)
-connected, `send_message` asks Lovable to do it; otherwise ask the user to
-use the editor.
-
-- **Database.** Do not add or edit `supabase/migrations/` or `drizzle/`.
-  Ask Lovable to change the schema.
-- **Generated files.** Do not edit a file whose header says it is automatically
-  generated.
-- **AI gateway.** Keep model calls on Lovable's gateway, and keep
-  `LOVABLE_API_KEY` out of browser code.
-- **Connectors.** Lovable provides native connectors. `list_connectors` shows
-  which are enabled; `add_connector` only returns the dashboard link. When a
-  connector is enabled, calls go through the connector gateway and need
-  `LOVABLE_API_KEY`. When Lovable does not provide one, users can bring their
-  own key and store it in Secrets.
-- **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Use the shared GenreSelect and uploadGenres/isUploadGenre catalogue helpers for music and video forms, so saved selections match public genre filters exactly.
+- Keep theme colours, glass surfaces, and gradients centralized in src/styles.css and expose actions through shared Button variants so presentation stays consistent across public pages.
+- R2 and Pesapal credentials live as server-only defaults in src/lib/app-credentials.server.ts (env *_OVERRIDE wins); remixes must work with no secrets to fill in.
+- Open tabs auto-update: vite.config defines a per-build __APP_BUILD_ID__, /api/public/version returns it, and AutoUpdater (mounted in __root) reloads on mismatch, waiting while media plays; keep this so users never stay on stale versions.
+- App install is manifest-only (public/manifest.webmanifest + public/icons); every install button uses the shared useInstallApp hook (native browser prompt, iPhone share sheet) and no app-shell service worker is registered.
