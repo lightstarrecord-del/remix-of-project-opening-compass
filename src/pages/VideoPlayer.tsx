@@ -286,7 +286,7 @@ const VideoPlayerInner = () => {
                     </button>
                     {video.genre && (
                       <Button variant="ghost"
-                        onClick={() => { navigate(videoGenreLink(video.genre)); setShowMore(false); }}
+                        onClick={() => { if (video.genre) navigate(videoGenreLink(video.genre)); setShowMore(false); }}
                         className="w-full flex items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-secondary transition-colors"
                       >
                         <ListPlus className="w-4 h-4" /> Browse {video.genre}
