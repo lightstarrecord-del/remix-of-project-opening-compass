@@ -100,14 +100,13 @@ export default function AutoUpdater() {
       if (decision === 'reload') reload();
       if (decision === 'wait') {
         toast('A new version of the site is ready', {
-            id: TOAST_ID,
-            description: alreadyReloaded
-              ? 'Close this page and open it again to get the latest version.'
-              : 'It will update when your song ends, or in a couple of minutes.',
-            duration: Infinity,
-            action: { label: 'Update now', onClick: reload },
-          },
-        );
+          id: TOAST_ID,
+          description: alreadyReloaded
+            ? 'Close this page and open it again to get the latest version.'
+            : 'It will update when your song ends, or in a couple of minutes.',
+          duration: Infinity,
+          action: { label: 'Update now', onClick: reload },
+        });
       }
     };
 
