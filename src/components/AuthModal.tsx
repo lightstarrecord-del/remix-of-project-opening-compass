@@ -156,7 +156,7 @@ const AuthModal = ({ open, onOpenChange }: AuthModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-popover backdrop-blur-xl">
         <DialogHeader>
           <DialogTitle className="text-center font-heading">{getTitle()}</DialogTitle>
         </DialogHeader>
