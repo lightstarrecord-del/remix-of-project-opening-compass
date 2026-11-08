@@ -5,6 +5,7 @@ import { decideUpdate } from '@/lib/updateCheck';
 const CHECK_EVERY_MS = 20_000;
 const MAX_WAIT_MS = 120_000;
 const TOAST_ID = 'site-update';
+const RELOADED_KEY = 'luo_auto_update_reloaded';
 
 function isMediaPlaying(): boolean {
   return Array.from(document.querySelectorAll('audio, video')).some((el) => {
@@ -29,7 +30,8 @@ async function fetchServerBuildId(): Promise<string | null> {
  * every 20 seconds, and again whenever the tab comes back into view, the listener moves
  * to another page, or playback stops. When a new version is live the tab reloads — at the
  * end of the current song if one is playing, and no later than two minutes after the
- * update was first seen, so nobody is left on an old version.
+ * update was first seen, so nobody is left on an old version. If one reload does not land,
+ * the tab stops reloading and asks the listener to reopen the page instead.
  */
 export default function AutoUpdater() {
   const reloading = useRef(false);
@@ -39,10 +41,35 @@ export default function AutoUpdater() {
     if (import.meta.env.DEV) return;
     const clientBuildId = __APP_BUILD_ID__;
 
+    const readReloaded = () => {
+      try {
+        return sessionStorage.getItem(RELOADED_KEY) === '1';
+      } catch {
+        return false;
+      }
+    };
+    const writeReloaded = () => {
+      try {
+        sessionStorage.setItem(RELOADED_KEY, '1');
+      } catch {
+        /* ignore */
+      }
+    };
+    const clearReloaded = () => {
+      try {
+        sessionStorage.removeItem(RELOADED_KEY);
+      } catch {
+        /* ignore */
+      }
+    };
+
+    let alreadyReloaded = readReloaded();
+
     const reload = () => {
       if (reloading.current) return;
       reloading.current = true;
       pendingSince.current = null;
+      writeReloaded();
       toast.loading('Updating to the latest version…', { id: TOAST_ID });
       setTimeout(() => window.location.reload(), 600);
     };
@@ -53,6 +80,8 @@ export default function AutoUpdater() {
 
       if (!serverBuildId || serverBuildId === clientBuildId) {
         pendingSince.current = null;
+        clearReloaded();
+        alreadyReloaded = false;
         return;
       }
       if (pendingSince.current === null) pendingSince.current = Date.now();
@@ -65,16 +94,22 @@ export default function AutoUpdater() {
         songJustEnded,
         waitedMs: Date.now() - pendingSince.current,
         maxWaitMs: MAX_WAIT_MS,
+        alreadyReloaded,
       });
 
       if (decision === 'reload') reload();
       if (decision === 'wait') {
-        toast('A new version of the site is ready', {
-          id: TOAST_ID,
-          description: 'It will update when your song ends, or in a couple of minutes.',
-          duration: Infinity,
-          action: { label: 'Update now', onClick: reload },
-        });
+        toast(
+          alreadyReloaded ? 'A new version of the site is ready' : 'A new version of the site is ready',
+          {
+            id: TOAST_ID,
+            description: alreadyReloaded
+              ? 'Close this page and open it again to get the latest version.'
+              : 'It will update when your song ends, or in a couple of minutes.',
+            duration: Infinity,
+            action: { label: 'Update now', onClick: reload },
+          },
+        );
       }
     };
 
