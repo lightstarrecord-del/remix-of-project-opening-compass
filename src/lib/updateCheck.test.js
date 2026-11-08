@@ -25,4 +25,51 @@ describe('decideUpdate', () => {
       decideUpdate({ ...base, serverBuildId: 'new', mediaPlaying: true, tabHidden: true }),
     ).toBe('reload');
   });
+
+  test('song just finished: reload even though the next song already started', () => {
+    expect(
+      decideUpdate({
+        ...base,
+        serverBuildId: 'new',
+        mediaPlaying: true,
+        songJustEnded: true,
+        waitedMs: 1_000,
+      }),
+    ).toBe('reload');
+  });
+
+  test('a reload that did not land is not repeated: ask the user instead', () => {
+    expect(
+      decideUpdate({
+        ...base,
+        serverBuildId: 'new',
+        mediaPlaying: true,
+        alreadyReloaded: true,
+      }),
+    ).toBe('wait');
+  });
+
+  test('waiting past the limit forces the update', () => {
+    expect(
+      decideUpdate({
+        ...base,
+        serverBuildId: 'new',
+        mediaPlaying: true,
+        waitedMs: 120_000,
+        maxWaitMs: 120_000,
+      }),
+    ).toBe('reload');
+  });
+
+  test('waiting under the limit still spares the song', () => {
+    expect(
+      decideUpdate({
+        ...base,
+        serverBuildId: 'new',
+        mediaPlaying: true,
+        waitedMs: 119_999,
+        maxWaitMs: 120_000,
+      }),
+    ).toBe('wait');
+  });
 });
