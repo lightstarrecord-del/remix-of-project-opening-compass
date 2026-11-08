@@ -9,6 +9,7 @@ import TrackListItem from '@/components/TrackListItem';
 import JsonLd from '@/components/JsonLd';
 import { useSEO, getWebsiteJsonLd } from '@/hooks/useSEO';
 import { fetchTracks, fetchArtists, newestFirst } from '@/lib/firebaseServices';
+import { genres } from '@/lib/constants';
 import { getProxiedUrl } from '@/lib/mediaProxy';
 import type { Track, Artist } from '@/lib/types';
 
@@ -102,6 +103,18 @@ const Index = () => {
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-bold font-heading">Most Played This Week</h2>
           <Link to="/music?filter=This+Week" className="text-xs text-muted-foreground hover:text-primary transition-colors">See All</Link>
+        </div>
+        {/* Genre quick filters — mobile only */}
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2 mb-3 lg:hidden">
+          {genres.map(genre => (
+            <Link
+              key={genre}
+              to={genre === 'All' ? '/music' : `/music?genre=${encodeURIComponent(genre)}`}
+              className="px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap glass text-muted-foreground hover:text-foreground transition-colors"
+            >
+              {genre}
+            </Link>
+          ))}
         </div>
         {displayWeekly.length > 0 ? (
           <div className="relative group">
