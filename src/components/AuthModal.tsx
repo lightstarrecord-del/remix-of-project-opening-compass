@@ -198,10 +198,10 @@ const AuthModal = ({ open, onOpenChange }: AuthModalProps) => {
             {!isLoginMode ? (
               /* REGISTER FORM */
               <form onSubmit={handleRegister} className="space-y-3">
-                <Input placeholder="Full Name" value={regName} onChange={e => setRegName(e.target.value)} required maxLength={100} />
-                <Input type="email" placeholder="Email" value={regEmail} onChange={e => setRegEmail(e.target.value)} required maxLength={255} />
+                <Input autoComplete="off" autoCorrect="off" autoCapitalize="none" spellCheck={false} placeholder="Full Name" value={regName} onChange={e => setRegName(e.target.value)} required maxLength={100} />
+                <Input autoComplete="off" autoCorrect="off" autoCapitalize="none" spellCheck={false} type="email" placeholder="Email" value={regEmail} onChange={e => setRegEmail(e.target.value)} required maxLength={255} />
                 <div className="relative">
-                  <Input type={showPassword ? 'text' : 'password'} placeholder="Password" value={regPassword} onChange={e => setRegPassword(e.target.value)} required minLength={8} maxLength={128} />
+                  <Input autoComplete="off" autoCorrect="off" autoCapitalize="none" spellCheck={false} type={showPassword ? 'text' : 'password'} placeholder="Password" value={regPassword} onChange={e => setRegPassword(e.target.value)} required minLength={8} maxLength={128} />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -213,9 +213,9 @@ const AuthModal = ({ open, onOpenChange }: AuthModalProps) => {
             ) : (
               /* LOGIN FORM */
               <form onSubmit={handleLogin} className="space-y-3">
-                <Input type="email" placeholder="Email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} required maxLength={255} />
+                <Input autoComplete="off" autoCorrect="off" autoCapitalize="none" spellCheck={false} type="email" placeholder="Email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} required maxLength={255} />
                 <div className="relative">
-                  <Input type={showPassword ? 'text' : 'password'} placeholder="Password" value={loginPassword} onChange={e => setLoginPassword(e.target.value)} required maxLength={128} />
+                  <Input autoComplete="off" autoCorrect="off" autoCapitalize="none" spellCheck={false} type={showPassword ? 'text' : 'password'} placeholder="Password" value={loginPassword} onChange={e => setLoginPassword(e.target.value)} required maxLength={128} />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -259,7 +259,7 @@ const AuthModal = ({ open, onOpenChange }: AuthModalProps) => {
           <form onSubmit={handleArtistOnboarding} className="space-y-3 mt-2">
             <p className="text-xs text-muted-foreground">Almost there! Complete your artist profile.</p>
             
-            <Input placeholder="Stage / Artist Name" value={artistName} onChange={e => setArtistName(e.target.value)} required maxLength={100} />
+            <Input autoComplete="off" autoCorrect="off" autoCapitalize="none" spellCheck={false} placeholder="Stage / Artist Name" value={artistName} onChange={e => setArtistName(e.target.value)} required maxLength={100} />
             
             <div className="space-y-1">
               <label className="text-xs font-medium text-muted-foreground">Select Genre</label>
@@ -275,9 +275,9 @@ const AuthModal = ({ open, onOpenChange }: AuthModalProps) => {
               className="resize-none"
             />
             
-            <Input type="tel" placeholder="Phone Number" value={artistPhone} onChange={e => setArtistPhone(e.target.value)} required maxLength={20} />
+            <Input autoComplete="off" autoCorrect="off" autoCapitalize="none" spellCheck={false} type="tel" placeholder="Phone Number" value={artistPhone} onChange={e => setArtistPhone(e.target.value)} required maxLength={20} />
             
-            <Input placeholder="Address / Location" value={artistAddress} onChange={e => setArtistAddress(e.target.value)} maxLength={200} />
+            <Input autoComplete="off" autoCorrect="off" autoCapitalize="none" spellCheck={false} placeholder="Address / Location" value={artistAddress} onChange={e => setArtistAddress(e.target.value)} maxLength={200} />
             
             <Button type="submit" className="w-full rounded-full" disabled={isSubmitting || !artistGenre}>
               {isSubmitting ? 'Completing...' : 'Complete Registration'}
