@@ -12,5 +12,5 @@
 - Use the shared GenreSelect and uploadGenres/isUploadGenre catalogue helpers for music and video forms, so saved selections match public genre filters exactly.
 - Keep theme colours, glass surfaces, and gradients centralized in src/styles.css and expose actions through shared Button variants so presentation stays consistent across public pages.
 - R2 and Pesapal credentials live as server-only defaults in src/lib/app-credentials.server.ts (env *_OVERRIDE wins); remixes must work with no secrets to fill in.
-- Open tabs auto-update: vite.config defines a per-build __APP_BUILD_ID__, /api/public/version returns it, and AutoUpdater (mounted in __root) reloads on mismatch, waiting while media plays; keep this so users never stay on stale versions.
+- Open tabs auto-update: vite.config defines a per-build __APP_BUILD_ID__, /api/public/version returns it, and AutoUpdater (mounted in __root) reloads on mismatch — at a song boundary if media is playing, forced after a short wait cap, and never reloading twice in a row; keep this so users never stay on stale versions.
 - App install is manifest-only (public/manifest.webmanifest + public/icons); every install button uses the shared useInstallApp hook (native browser prompt, iPhone share sheet) and no app-shell service worker is registered.
