@@ -99,9 +99,7 @@ export default function AutoUpdater() {
 
       if (decision === 'reload') reload();
       if (decision === 'wait') {
-        toast(
-          alreadyReloaded ? 'A new version of the site is ready' : 'A new version of the site is ready',
-          {
+        toast('A new version of the site is ready', {
             id: TOAST_ID,
             description: alreadyReloaded
               ? 'Close this page and open it again to get the latest version.'
