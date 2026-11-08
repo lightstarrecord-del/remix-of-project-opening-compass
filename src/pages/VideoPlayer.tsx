@@ -1,4 +1,5 @@
 import { siteOrigin } from '@/lib/siteUrl';
+import { recordVideoPlay } from '@/lib/playHistory';
 import { useParams, Link, useNavigate } from '@/lib/router-compat';
 import { useState, useEffect, useRef, forwardRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -42,6 +43,7 @@ const VideoPlayerInner = () => {
 
     fetchVideoById(id).then(v => {
       setVideo(v);
+      if (v) recordVideoPlay(v);
       setLoading(false);
 
       if (v) {

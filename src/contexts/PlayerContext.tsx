@@ -64,6 +64,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     const audio = audioRef.current;
     if (!audio) return;
 
+    recordTrackPlay(track);
     if (trackList) setQueue(trackList);
 
     if (pauseAllVideos()) {
