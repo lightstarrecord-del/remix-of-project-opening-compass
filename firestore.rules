@@ -316,6 +316,42 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    // Non-sensitive visitor clicks. Visitors can append only; only admins can read/clear.
+    match /userActivities/{activityId} {
+      allow read, delete: if isAdmin();
+      allow update: if false;
+      allow create: if request.resource.data.keys().hasAll([
+          'action', 'target', 'page', 'destination', 'sessionId', 'signedIn', 'device', 'createdAt'
+        ]) && request.resource.data.keys().hasOnly([
+          'action', 'target', 'page', 'destination', 'sessionId', 'signedIn', 'device', 'createdAt'
+        ])
+        && request.resource.data.action in [
+          'Play', 'Pause', 'Next', 'Previous', 'Download', 'Share', 'Like', 'Unlike',
+          'Follow', 'Unfollow', 'Sign In', 'Sign Out', 'Sign Up', 'Register', 'Login',
+          'Upload', 'Search', 'See All', 'Recently Uploaded', 'Recently Added',
+          'Playlist', 'Music', 'Videos', 'Genres', 'Artists', 'Home', 'Dashboard',
+          'Save', 'Cancel', 'Close', 'Delete', 'Edit', 'Install App', 'Add to Playlist',
+          'Click button', 'Click a', 'Click input', 'Click select', 'Click textarea',
+          'Click summary', 'Click tab', 'Click checkbox', 'Click switch', 'Click slider',
+          'Click page', 'Click password field', 'Click form field'
+        ]
+        && request.resource.data.target in ['button', 'a', 'input', 'select', 'textarea', 'summary', 'tab', 'checkbox', 'switch', 'slider', 'page']
+        && request.resource.data.page in [
+          '/', '/music', '/videos', '/artists', '/genres', '/browse', '/recently-added',
+          '/playlist', '/favourites', '/profile', '/dashboard', '/guide', '/reels',
+          '/admin', '/admin/users', '/admin/artists', '/admin/music', '/admin/videos',
+          '/admin/hero-slides', '/admin/subscriptions', '/admin/genres', '/admin/guide',
+          '/admin/activities', '/artist/:id', '/video/:id', '/play/:id', '/other'
+        ]
+        && (request.resource.data.destination in ['', 'external']
+          || request.resource.data.destination.matches('^/[a-zA-Z/:-]*$') && request.resource.data.destination.size() <= 50)
+        && request.resource.data.sessionId is string
+        && request.resource.data.sessionId.matches('^[a-f0-9-]{36}$')
+        && request.resource.data.signedIn == isAuthenticated()
+        && request.resource.data.device in ['mobile', 'desktop']
+        && request.resource.data.createdAt == request.time;
+    }
+
     // ============================================
     // SEARCH & INDEXING
     // ============================================

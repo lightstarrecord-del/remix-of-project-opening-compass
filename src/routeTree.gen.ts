@@ -26,6 +26,7 @@ import { Route as MainRecentlyAddedRouteImport } from './routes/_main.recently-a
 import { Route as MainReelsRouteImport } from './routes/_main.reels'
 import { Route as MainVideosRouteImport } from './routes/_main.videos'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminActivitiesRouteImport } from './routes/admin.activities'
 import { Route as AdminArtistsRouteImport } from './routes/admin.artists'
 import { Route as AdminGenresRouteImport } from './routes/admin.genres'
 import { Route as AdminGuideRouteImport } from './routes/admin.guide'
@@ -129,6 +130,11 @@ const MainVideosRoute = MainVideosRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminActivitiesRoute = AdminActivitiesRouteImport.update({
+  id: '/admin/activities',
+  path: '/admin/activities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminArtistsRoute = AdminArtistsRouteImport.update({
@@ -251,6 +257,7 @@ export interface FileRoutesByFullPath {
   '/recently-added': typeof MainRecentlyAddedRoute
   '/reels': typeof MainReelsRoute
   '/videos': typeof MainVideosRoute
+  '/admin/activities': typeof AdminActivitiesRoute
   '/admin/artists': typeof AdminArtistsRoute
   '/admin/genres': typeof AdminGenresRoute
   '/admin/guide': typeof AdminGuideRoute
@@ -288,6 +295,7 @@ export interface FileRoutesByTo {
   '/recently-added': typeof MainRecentlyAddedRoute
   '/reels': typeof MainReelsRoute
   '/videos': typeof MainVideosRoute
+  '/admin/activities': typeof AdminActivitiesRoute
   '/admin/artists': typeof AdminArtistsRoute
   '/admin/genres': typeof AdminGenresRoute
   '/admin/guide': typeof AdminGuideRoute
@@ -328,6 +336,7 @@ export interface FileRoutesById {
   '/_main/recently-added': typeof MainRecentlyAddedRoute
   '/_main/reels': typeof MainReelsRoute
   '/_main/videos': typeof MainVideosRoute
+  '/admin/activities': typeof AdminActivitiesRoute
   '/admin/artists': typeof AdminArtistsRoute
   '/admin/genres': typeof AdminGenresRoute
   '/admin/guide': typeof AdminGuideRoute
@@ -369,6 +378,7 @@ export interface FileRouteTypes {
     | '/recently-added'
     | '/reels'
     | '/videos'
+    | '/admin/activities'
     | '/admin/artists'
     | '/admin/genres'
     | '/admin/guide'
@@ -406,6 +416,7 @@ export interface FileRouteTypes {
     | '/recently-added'
     | '/reels'
     | '/videos'
+    | '/admin/activities'
     | '/admin/artists'
     | '/admin/genres'
     | '/admin/guide'
@@ -445,6 +456,7 @@ export interface FileRouteTypes {
     | '/_main/recently-added'
     | '/_main/reels'
     | '/_main/videos'
+    | '/admin/activities'
     | '/admin/artists'
     | '/admin/genres'
     | '/admin/guide'
@@ -472,6 +484,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   MainRoute: typeof MainRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  AdminActivitiesRoute: typeof AdminActivitiesRoute
   AdminArtistsRoute: typeof AdminArtistsRoute
   AdminGenresRoute: typeof AdminGenresRoute
   AdminGuideRoute: typeof AdminGuideRoute
@@ -611,6 +624,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/activities': {
+      id: '/admin/activities'
+      path: '/admin/activities'
+      fullPath: '/admin/activities'
+      preLoaderRoute: typeof AdminActivitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/artists': {
@@ -801,6 +821,7 @@ const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   MainRoute: MainRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  AdminActivitiesRoute: AdminActivitiesRoute,
   AdminArtistsRoute: AdminArtistsRoute,
   AdminGenresRoute: AdminGenresRoute,
   AdminGuideRoute: AdminGuideRoute,
