@@ -18,6 +18,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { PlayerProvider } from "@/contexts/PlayerContext";
 import NotFound from "@/pages/NotFound";
 import AutoUpdater from "@/components/AutoUpdater";
+import ActivityRecorder from "@/components/ActivityRecorder";
 
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
@@ -137,6 +138,7 @@ function RootComponent() {
             <Toaster />
             <Sonner />
             <AutoUpdater />
+            <ActivityRecorder />
             {/* Required: nested routes render here. */}
             <Outlet />
           </PlayerProvider>

@@ -12,6 +12,7 @@ import {
   Tag,
   Shield,
   LogOut,
+  Activity,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -20,6 +21,7 @@ import { cn } from '@/lib/utils';
 const navItems = [
   { to: '/admin', icon: Home, label: 'Dashboard', end: true },
   { to: '/admin/users', icon: Users, label: 'Users' },
+  { to: '/admin/activities', icon: Activity, label: 'User Activities' },
   { to: '/admin/artists', icon: Mic2, label: 'Artists' },
   { to: '/admin/music', icon: Music, label: 'Music' },
   { to: '/admin/videos', icon: Video, label: 'Videos' },
