@@ -20,6 +20,8 @@ export function decideUpdate(input: {
   waitedMs?: number;
   /** Longest an update may wait for playback before it is forced. */
   maxWaitMs?: number;
+  /** This tab already reloaded once and is still on an old version. */
+  alreadyReloaded?: boolean;
 }): UpdateDecision {
   const {
     clientBuildId,
@@ -29,9 +31,12 @@ export function decideUpdate(input: {
     songJustEnded = false,
     waitedMs = 0,
     maxWaitMs = 120_000,
+    alreadyReloaded = false,
   } = input;
 
   if (!serverBuildId || serverBuildId === clientBuildId) return 'none';
+  // A reload that didn't land means reloading again would just loop: ask the user instead.
+  if (alreadyReloaded) return 'wait';
   if (songJustEnded) return 'reload';
   if (mediaPlaying && !tabHidden) {
     return waitedMs >= maxWaitMs ? 'reload' : 'wait';

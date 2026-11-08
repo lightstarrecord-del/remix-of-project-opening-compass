@@ -38,6 +38,17 @@ describe('decideUpdate', () => {
     ).toBe('reload');
   });
 
+  test('a reload that did not land is not repeated: ask the user instead', () => {
+    expect(
+      decideUpdate({
+        ...base,
+        serverBuildId: 'new',
+        mediaPlaying: true,
+        alreadyReloaded: true,
+      }),
+    ).toBe('wait');
+  });
+
   test('waiting past the limit forces the update', () => {
     expect(
       decideUpdate({
