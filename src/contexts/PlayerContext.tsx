@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useRef, useEffect, useCallback, ReactNode } from 'react';
+import { recordTrackPlay } from '@/lib/playHistory';
 import type { Track } from '@/lib/types';
 import { getProxiedUrl } from '@/lib/mediaProxy';
 import { isGoogleDriveUrl } from '@/lib/googleDrive';
