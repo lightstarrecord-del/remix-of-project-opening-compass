@@ -23,18 +23,9 @@ const RecentlyAdded = () => {
   useEffect(() => {
     const load = async () => {
       const [t, v] = await Promise.all([fetchTracks(), fetchVideos()]);
-      // Show items marked as recentlyAdded, or fall back to newest by date
-      const recentTracks = t.filter((x: any) => x.recentlyAdded);
-      const recentVideos = v.filter((x: any) => x.recentlyAdded);
-
-      if (recentTracks.length > 0 || recentVideos.length > 0) {
-        setTracks(recentTracks);
-        setVideos(recentVideos);
-      } else {
-        // Fallback: newest by date
-        setTracks([...t].sort((a, b) => (b.addedDate || '').localeCompare(a.addedDate || '')).slice(0, 8));
-        setVideos([...v].sort((a, b) => (b.addedDate || '').localeCompare(a.addedDate || '')).slice(0, 4));
-      }
+      const byNew = (a: any, b: any) => (b.addedDate || '').localeCompare(a.addedDate || '');
+      setTracks([...t].sort(byNew));
+      setVideos([...v].sort(byNew));
       setLoading(false);
     };
     load();

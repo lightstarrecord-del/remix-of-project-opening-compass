@@ -10,6 +10,8 @@ import { fetchUserPlaylists, fetchAllPlaylists, createPlaylist, deletePlaylist, 
 import { getProxiedUrl } from '@/lib/mediaProxy';
 import type { Track } from '@/lib/types';
 import { toast } from '@/hooks/use-toast';
+import VideoCard from '@/components/VideoCard';
+import { getPlayHistory, clearPlayHistory, type HistoryEntry } from '@/lib/playHistory';
 
 const PlaylistPage = () => {
   const { user } = useAuth();
@@ -24,6 +26,8 @@ const PlaylistPage = () => {
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [updatingCover, setUpdatingCover] = useState(false);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  useEffect(() => { setHistory(getPlayHistory()); }, []);
   const coverRef = useRef<HTMLInputElement>(null);
   const editCoverRef = useRef<HTMLInputElement>(null);
 
@@ -260,6 +264,28 @@ const PlaylistPage = () => {
             <p className="text-muted-foreground text-sm py-8 text-center col-span-full">No playlists yet. {user ? 'Create one to get started!' : 'Sign in to create one!'}</p>
           )}
         </div>
+      )}
+      {history.length > 0 && (
+        <section className="mt-10">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-bold font-heading">Recently Played</h2>
+            <Button variant="ghost" size="sm" onClick={() => { clearPlayHistory(); setHistory([]); }}>Clear</Button>
+          </div>
+          {history.some(h => h.kind === 'track') && (
+            <div className="flex flex-col gap-1 mb-6">
+              {history.filter(h => h.kind === 'track').map((h, i) => (
+                <TrackListItem key={h.id} track={h.item as Track} index={i} />
+              ))}
+            </div>
+          )}
+          {history.some(h => h.kind === 'video') && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {history.filter(h => h.kind === 'video').map(h => (
+                <VideoCard key={h.id} video={h.item as any} />
+              ))}
+            </div>
+          )}
+        </section>
       )}
     </div>
   );
