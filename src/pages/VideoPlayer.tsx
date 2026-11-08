@@ -17,6 +17,7 @@ import { useSEO, getMusicVideoJsonLd } from '@/hooks/useSEO';
 import { fetchVideoById, fetchVideos, fetchArtistById, checkFollowing, toggleFollow, toggleFavourite, fetchUserFavourites, incrementVideoViews } from '@/lib/firebaseServices';
 import { toast } from '@/hooks/use-toast';
 import type { MusicVideo, Artist } from '@/lib/types';
+import { videoGenreLink } from '@/lib/videoGenres';
 
 const VideoPlayerInner = () => {
   const { id } = useParams<{ id: string }>();
@@ -284,12 +285,12 @@ const VideoPlayerInner = () => {
                       <Share2 className="w-4 h-4" /> Copy Link
                     </button>
                     {video.genre && (
-                      <button
-                        onClick={() => { navigate(`/videos`); setShowMore(false); }}
+                      <Button variant="ghost"
+                        onClick={() => { navigate(videoGenreLink(video.genre)); setShowMore(false); }}
                         className="w-full flex items-center gap-3 px-4 py-3 text-sm text-foreground hover:bg-secondary transition-colors"
                       >
                         <ListPlus className="w-4 h-4" /> Browse {video.genre}
-                      </button>
+                      </Button>
                     )}
                   </motion.div>
                 )}

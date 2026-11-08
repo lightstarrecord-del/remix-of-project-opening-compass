@@ -6,6 +6,8 @@ import FilterTabs from '@/components/FilterTabs';
 import { useSEO } from '@/hooks/useSEO';
 import { fetchVideos } from '@/lib/firebaseServices';
 import type { MusicVideo } from '@/lib/types';
+import { useSearchParams } from '@/lib/router-compat';
+import { filterVideoGenre, videoGenre } from '@/lib/videoGenres';
 
 const container = {
   hidden: { opacity: 0 },
@@ -26,19 +28,31 @@ const Videos = () => {
     keywords: ['luo music videos', 'acholi music videos', 'free video download', 'african music videos', 'luo videos'],
   });
   const [activeFilter, setActiveFilter] = useState('All');
-  const [activeGenre, setActiveGenre] = useState('All');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeGenre = videoGenre(searchParams.get('genre') ?? 'All');
   const [videos, setVideos] = useState<MusicVideo[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
     const load = async () => {
       setLoading(true);
-      const data = await fetchVideos(activeGenre);
+      const data = await fetchVideos();
+      if (cancelled) return;
       setVideos(data);
       setLoading(false);
     };
     load();
-  }, [activeGenre]);
+    return () => { cancelled = true; };
+  }, []);
+
+  const visibleVideos = filterVideoGenre(videos, activeGenre);
+  const setActiveGenre = (genre: string) => {
+    const next = new URLSearchParams(searchParams);
+    if (genre === 'All') next.delete('genre');
+    else next.set('genre', genre);
+    setSearchParams(next);
+  };
 
   return (
     <div className="pb-8">
@@ -55,12 +69,12 @@ const Videos = () => {
         </div>
       ) : (
         <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4" key={activeGenre}>
-          {videos.map(video => (
+          {visibleVideos.map(video => (
             <motion.div key={video.id} variants={item}>
               <VideoCard video={video} />
             </motion.div>
           ))}
-          {videos.length === 0 && (
+          {visibleVideos.length === 0 && (
             <p className="text-muted-foreground text-sm py-8 text-center col-span-full">No videos found in this genre.</p>
           )}
         </motion.div>
