@@ -495,7 +495,7 @@ const ArtistDashboard = () => {
       <h1 className="text-2xl font-bold font-heading mb-1">Artist Dashboard</h1>
       <p className="text-muted-foreground text-sm mb-6">Manage your music, videos, and profile</p>
 
-      <div className="flex gap-2 border-b border-border pb-3 mb-6 overflow-x-auto scrollbar-hide">
+      <div className="flex flex-wrap gap-2 border-b border-border pb-3 mb-6">
         {tabs.map(tab => (
           <button key={tab.id} onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${activeTab === tab.id ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground hover:bg-secondary'}`}>
